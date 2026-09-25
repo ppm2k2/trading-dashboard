@@ -5,17 +5,14 @@ WORKDIR /app
 # Copy package manifests
 COPY package*.json ./
 
-# Install dependencies
+# Install dependencies cleanly
 RUN npm install
 
 # Copy source code
 COPY . .
 
-# Fix binary executable permissions for Linux container environment
-RUN chmod +x ./node_modules/.bin/*
-
-# Build static assets
-RUN npm run build
+# Bypass the shell wrapper and run Vite directly via Node (avoids CRLF line ending issues)
+RUN node node_modules/vite/bin/vite.js build
 
 # Production Stage with Nginx
 FROM nginx:alpine
