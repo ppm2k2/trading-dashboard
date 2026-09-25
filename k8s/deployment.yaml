@@ -1,0 +1,67 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-backend
+  namespace: trading-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trading-backend
+  template:
+    metadata:
+      labels:
+        app: trading-backend
+    spec:
+      containers:
+      - name: backend
+        image: ghcr.io/ppm2k2/trading-dashboard-backend:latest
+        ports:
+        - containerPort: 8000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: trading-frontend
+  namespace: trading-prod
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: trading-frontend
+  template:
+    metadata:
+      labels:
+        app: trading-frontend
+    spec:
+      containers:
+      - name: frontend
+        image: ghcr.io/ppm2k2/trading-dashboard-frontend:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trading-backend-svc
+  namespace: trading-prod
+spec:
+  type: ClusterIP
+  selector:
+    app: trading-backend
+  ports:
+  - port: 8000
+    targetPort: 8000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: trading-frontend-svc
+  namespace: trading-prod
+spec:
+  type: LoadBalancer
+  selector:
+    app: trading-frontend
+  ports:
+  - port: 80
+    targetPort: 80
