@@ -32,6 +32,7 @@ jobs:
       with:
         context: ./backend
         push: true
+        no-cache: true
         tags: ${{ env.REGISTRY }}/${{ env.BACKEND_IMAGE }}:${{ github.sha }}
 
     - name: Build and Push Frontend Image
@@ -39,6 +40,7 @@ jobs:
       with:
         context: ./frontend
         push: true
+        no-cache: true
         tags: ${{ env.REGISTRY }}/${{ env.FRONTEND_IMAGE }}:${{ github.sha }}
 
     - name: Set up Kubectl
