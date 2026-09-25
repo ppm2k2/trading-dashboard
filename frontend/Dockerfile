@@ -11,7 +11,7 @@ RUN npm install
 # Copy source code
 COPY . .
 
-# Bypass the shell wrapper and run Vite directly via Node (avoids CRLF line ending issues)
+# Directly invoke Vite via Node to completely avoid npm wrapper scripts and permission errors
 RUN node node_modules/vite/bin/vite.js build
 
 # Production Stage with Nginx
