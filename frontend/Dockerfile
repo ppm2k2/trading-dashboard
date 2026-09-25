@@ -2,14 +2,17 @@ FROM node:20-alpine AS builder
 
 WORKDIR /app
 
-# Copy dependency manifests first
+# Copy package manifests
 COPY package*.json ./
 
-# Clean install to guarantee proper executable permissions on Linux
-RUN npm ci || npm install
+# Install dependencies
+RUN npm install
 
-# Copy the rest of the source files AFTER dependencies are installed
+# Copy source code
 COPY . .
+
+# Fix binary executable permissions for Linux container environment
+RUN chmod +x ./node_modules/.bin/*
 
 # Build static assets
 RUN npm run build
